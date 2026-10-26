@@ -1,1 +1,58 @@
-
+<!DOCTYPE html>
+<html lang="rw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FindMyPrice Rwanda</title>
+<style>
+body{font-family:Arial;margin:0;background:#f2f5f2;color:#222}
+header{background:#087b42;color:white;padding:22px;text-align:center}
+main{padding:20px;max-width:600px;margin:auto}
+input,button{box-sizing:border-box;width:100%;padding:13px;margin:7px 0;border-radius:6px}
+input{border:1px solid #ccc}
+button{background:#087b42;color:white;border:0;font-size:16px}
+.card{background:white;padding:15px;margin:12px 0;border-radius:8px}
+</style>
+</head>
+<body>
+<header>
+<h1>FindMyPrice Rwanda</h1>
+<p>Geranya ibiciro by'ibicuruzwa mu Rwanda</p>
+</header>
+<main>
+<h2>Shaka ibicuruzwa</h2>
+<input id="search" placeholder="Andika izina ry'igicuruzwa">
+<div id="products"></div>
+<h2>Umucuruzi: Shyiraho igicuruzwa</h2>
+<form id="form">
+<input id="shop" placeholder="Izina ry'iduka" required>
+<input id="product" placeholder="Izina ry'igicuruzwa" required>
+<input id="price" type="number" placeholder="Igiciro muri RWF" required>
+<input id="location" placeholder="Aho iduka riherereye" required>
+<input id="phone" placeholder="Telefoni" required>
+<button type="submit">Publish listing</button>
+</form>
+<p id="message"></p>
+</main>
+<script>
+const form=document.getElementById('form');
+const products=document.getElementById('products');
+let items=JSON.parse(localStorage.getItem('fmp')||'[]');
+function show(){
+products.innerHTML='';
+items.filter(x=>x.product.toLowerCase().includes(document.getElementById('search').value.toLowerCase())).forEach(x=>{
+products.innerHTML+=`<div class="card"><b>${x.product}</b><p>${x.price} RWF</p><p>${x.location}</p><p>${x.shop} — ${x.phone}</p></div>`;
+});
+}
+form.onsubmit=e=>{
+e.preventDefault();
+items.unshift({shop:shop.value,product:product.value,price:price.value,location:location.value,phone:phone.value});
+localStorage.setItem('fmp',JSON.stringify(items));
+show();form.reset();
+document.getElementById('message').textContent='Igicuruzwa cyashyizweho kuri iyi telefone.';
+};
+document.getElementById('search').oninput=show;
+show();
+</script>
+</body>
+</html>
